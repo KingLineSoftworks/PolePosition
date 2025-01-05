@@ -1,0 +1,82 @@
+# ========================================
+# Cmake stuff
+# ========================================
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+compile_commands.json
+
+# ========================================
+# OS dependent stuff
+# ========================================
+.DS_Store
+
+# ========================================
+# IDE stuff
+# ========================================
+
+# ----- VS Code ----- #
+
+.vscode
+.*vscode
+
+# ----- CLion tings ----- #
+
+# jetbrains project config (?)
+.idea
+
+# build directories
+.clion-debug
+.clion-release
+.clion-test
+
+# ========================================
+# Compiled stuff and assets
+# ========================================
+
+# ----- manual cmake tings ----- #
+
+build/
+.build/
+.debug/
+.test/
+.release/
+
+# ----- quartz logs ----- #
+
+QUARTZlog.*
+
+# ----- clangd stuff ----- #
+
+.cache/
+
+# ----- SPIR-V shader bytecode ----- #
+
+*.tempfile
+*.spv
+
+# ----- images ----- #
+
+*.jpg
+*.png
+
+# ----- 3d objects ----- #
+
+*.obj
+*.mtl
+*.gltf
+*.glb
+
+# ========================================
+# Miscellaneous
+# ========================================
+
+*.old
+*.old.*
+*.external
+*.external.*
+*scratch.txt*
+*scratch.md*
+.ignore
+*.bkp.*
