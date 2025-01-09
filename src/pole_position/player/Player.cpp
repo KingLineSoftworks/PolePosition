@@ -135,3 +135,4 @@ Player::cameraUpdate(
     this->rotateDoodadYaw();
     this->rotateCameraPitch();
 }
+
