@@ -8,4 +8,4 @@ include(ApplicationVersion)
 
 # -----=====***** the versions *****=====----- #
 
-set_application_major_minor_patch_versions(9 69 420)
+set_application_major_minor_patch_versions(0 0 1) # initial setup and test scene working
