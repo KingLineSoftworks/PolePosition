@@ -16,7 +16,7 @@ createDemoLevelSceneParameters(
         {
             util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/unit_models/unit_cube/glb/unit_cube.glb"),
             {
-                { 5.0f, 7.5f, 5.0f },
+                { 5.0f, 0.5f, 5.0f },
                 0.0f,
                 { 0.0f, 0.0f, 1.0f },
                 { 1.0f, 1.0f, 1.0f }
@@ -32,27 +32,9 @@ createDemoLevelSceneParameters(
             [&player] (quartz::scene::Doodad::UpdateCallbackParameters parameters) { player.updateCallback(parameters); }
         },
         {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/unit_models/unit_sphere/glb/unit_sphere.glb"),
-            {
-                { 5.0f, 10.0f, 0.0f },
-                0.0f,
-                { 0.0f, 0.0f, 1.0f },
-                { 1.0f, 1.0f, 1.0f }
-            },
-            {{
-                reactphysics3d::BodyType::DYNAMIC,
-                true,
-                math::Vec3(0.0, 1.0, 0.0),
-                quartz::physics::SphereShape::Parameters(1.0)
-            }},
-            {},
-            {},
-            {}
-        },
-        {
             util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
             {
-                {0.0f, -5.0f, 0.0f},
+                {0.0f, -0.5f, 0.0f},
                 0.0f,
                 {0.0f, 1.0f, 0.0f},
                 {25.0f, 1.0f, 25.0f}

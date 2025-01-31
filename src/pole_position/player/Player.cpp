@@ -12,7 +12,7 @@ Player::Player() :
     m_distanceToCamera(5.0),
     m_camera(
         75.0f,
-        { 1.25f, 0.0f, 10.0f },
+        { 1.25f, 3.0f, 10.0f },
         math::Vec3::Backward
     )
 {}
@@ -48,17 +48,17 @@ Player::determineLateralMovementDirection(
 
     math::Vec3 movementDirection(0.0f, 0.0f, 0.0f);
     if (inputManager.getKeyDown_w()) {
-        movementDirection.x += 1.0f;
+        movementDirection += 1.0f * math::Vec3::Forward;
     }
     if (inputManager.getKeyDown_s()) {
-        movementDirection.x -= 1.0f;
+        movementDirection += 1.0f * math::Vec3::Backward;
     }
 
     if (inputManager.getKeyDown_d()) {
-        movementDirection.z += 1.0f;
+        movementDirection += 1.0f * math::Vec3::Right;
     }
     if (inputManager.getKeyDown_a()) {
-        movementDirection.z -= 1.0f;
+        movementDirection += 1.0f * math::Vec3::Left;
     }
 
     return movementDirection.normalize();
