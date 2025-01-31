@@ -38,7 +38,7 @@ DoBoilerplateStuff(
     util::Logger::setLevels({
         // demo app
         {"GENERAL", util::Logger::Level::info},
-        {"PLAYER", util::Logger::Level::info},
+        {"PLAYER", util::Logger::Level::trace},
 
         // math
         {"TRANSFORM", util::Logger::Level::info},

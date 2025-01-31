@@ -9,10 +9,10 @@ add_executable(
     main.cpp
     Boilerplate.hpp
     Boilerplate.cpp
-    SceneParameters.hpp
-    SceneParameters.cpp
-    player/Player.hpp
-    player/Player.cpp
+    player_driver/PlayerDriver.hpp
+    player_driver/PlayerDriver.cpp
+    scene/SceneParameters.hpp
+    scene/SceneParameters.cpp
 )
 
 target_include_directories(

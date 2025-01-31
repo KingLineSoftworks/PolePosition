@@ -8,9 +8,9 @@
 
 #include "pole_position/Loggers.hpp"
 
-class Player {
+class PlayerDriver {
 public: // member functions
-    Player();
+    PlayerDriver();
 
     void awakenCallback(quartz::scene::Doodad::AwakenCallbackParameters parameters);
     void fixedUpdateCallback(quartz::scene::Doodad::FixedUpdateCallbackParameters parameters);
@@ -19,29 +19,20 @@ public: // member functions
     USE_LOGGER(PLAYER);
 
 private: // member functions
-
-    // Fixed Update helpers
     
-    math::Vec3 determineLateralMovementDirection(
-        const quartz::managers::InputManager& inputManager
+    void cameraUpdate(
+        const math::Vec3& currentCarVelocity,
+        const math::Vec3& currentCarPosition,
+        const math::Quaternion& currentCarRotation
     );
-    void movementFixedUpdate(
-        quartz::scene::Doodad* const p_doodad,
-        const quartz::managers::InputManager& inputManager
-    );
-
-    // Update helpers
-    
-    void placeCameraBehindDoodad(quartz::scene::Doodad* const p_doodad);
-    void rotateCameraYaw();
-    void rotateDoodadYaw();
-    void rotateCameraPitch();
-    void cameraUpdate(quartz::scene::Doodad* const p_doodad);
 
 private: // member variables
-    double m_movementSpeed;
+    math::Vec3 m_currentDesiredDirection;
+    math::Vec3 m_currentVelocity;
 
-    double m_distanceToCamera;
     quartz::scene::Camera m_camera;
+    double m_cameraLookAheadAmount;
+    double m_cameraHorizontalOffsetAmount;
+    double m_cameraVerticalOffsetAmount;
 };
 

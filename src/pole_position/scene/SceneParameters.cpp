@@ -1,16 +1,17 @@
 #include <vector>
 
+#include "math/transform/Vec3.hpp"
 #include "util/file_system/FileSystem.hpp"
 
 #include "quartz/scene/doodad/Doodad.hpp"
 #include "quartz/scene/scene/Scene.hpp"
 
-#include "pole_position/SceneParameters.hpp"
-#include "pole_position/player/Player.hpp"
+#include "pole_position/player_driver/PlayerDriver.hpp"
+#include "pole_position/scene/SceneParameters.hpp"
 
 quartz::scene::Scene::Parameters
 createDemoLevelSceneParameters(
-    Player& player
+    PlayerDriver& playerDriver
 ) {
     std::vector<quartz::scene::Doodad::Parameters> doodadParameters = {
         {
@@ -27,9 +28,9 @@ createDemoLevelSceneParameters(
                 math::Vec3(0.0, 1.0, 0.0),
                 quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
             }},
-            [&player] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { player.awakenCallback(parameters); },
-            [&player] (quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { player.fixedUpdateCallback(parameters); },
-            [&player] (quartz::scene::Doodad::UpdateCallbackParameters parameters) { player.updateCallback(parameters); }
+            [&playerDriver] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerDriver.awakenCallback(parameters); },
+            [&playerDriver] (quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { playerDriver.fixedUpdateCallback(parameters); },
+            [&playerDriver] (quartz::scene::Doodad::UpdateCallbackParameters parameters) { playerDriver.updateCallback(parameters); }
         },
         {
             util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
