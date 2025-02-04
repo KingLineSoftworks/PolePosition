@@ -38,13 +38,13 @@ createDemoLevelSceneParameters(
                 {0.0f, -0.5f, 0.0f},
                 0.0f,
                 {0.0f, 1.0f, 0.0f},
-                {25.0f, 1.0f, 25.0f}
+                {500.0f, 1.0f, 500.0f}
             },
             {{
                 reactphysics3d::BodyType::STATIC,
                 false,
                 math::Vec3(1.0, 1.0, 1.0),
-                quartz::physics::BoxShape::Parameters({25.0f, 1.0f, 25.0f})
+                quartz::physics::BoxShape::Parameters({500.0f, 1.0f, 500.0f})
             }},
             {},
             {},

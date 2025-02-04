@@ -9,6 +9,12 @@
 #include "pole_position/Loggers.hpp"
 
 class PlayerDriver {
+public: // classes and enums
+    struct GearInformation {
+        double accelerationRate_mps2;
+        double maxSpeed_kph;
+    };
+
 public: // member functions
     PlayerDriver();
 
@@ -19,7 +25,37 @@ public: // member functions
     USE_LOGGER(PLAYER);
 
 private: // member functions
-    
+    void actuationFixedUpdate(
+        const quartz::managers::InputManager& inputManager,
+        quartz::scene::Doodad* const p_doodad,
+        const double tickTimeDelta,
+        const double currentSpeed_mps
+    );
+    void forwardAcceleration(
+        quartz::scene::Doodad* const p_doodad,
+        const double tickTimeDelta,
+        const double actuationAmount,
+        const double currentSpeed_mps
+    );
+    void forwardBrake(
+        quartz::scene::Doodad* const p_doodad,
+        const double tickTimeDelta,
+        const double actuationAmount,
+        const double currentSpeed_mps
+    );
+    void reverseAcceleration(
+        quartz::scene::Doodad* const p_doodad,
+        const double tickTimeDelta,
+        const double actuationAmount,
+        const double currentSpeed_mps
+    );
+    void reverseBrake(
+        quartz::scene::Doodad* const p_doodad,
+        const double tickTimeDelta,
+        const double actuationAmount,
+        const double currentSpeed_mps
+    );
+
     void cameraUpdate(
         const math::Vec3& currentCarVelocity,
         const math::Vec3& currentCarPosition,
@@ -27,8 +63,11 @@ private: // member functions
     );
 
 private: // member variables
+    std::vector<GearInformation> m_gearInformations;
+    uint32_t m_currentGear;
+
     math::Vec3 m_currentDesiredDirection;
-    math::Vec3 m_currentVelocity;
+    math::Vec3 m_currentVelocity_mps;
 
     quartz::scene::Camera m_camera;
     double m_cameraLookAheadAmount;
