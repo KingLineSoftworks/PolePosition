@@ -9,7 +9,7 @@
 #include "pole_position/player_driver/PlayerDriver.hpp"
 
 PlayerDriver::PlayerDriver() :
-    m_gearInformations({{0.7, 30}, {0.45, 60}, { 0.3, 90}}),
+    m_gearInformations({{0.7, 10}, {0.4, 25}, {0.2, 35}}),
     m_currentGear(0),
     m_currentDesiredDirection(),
     m_currentVelocity_mps(),
@@ -36,7 +36,7 @@ PlayerDriver::fixedUpdateCallback(
     quartz::scene::Doodad::FixedUpdateCallbackParameters parameters
 ) {
     // Compute the current velocity
-    m_currentVelocity_mps = parameters.p_doodad->getRigidBodyOptionalReference()->getLinearVelocity();
+    m_currentVelocity_mps = parameters.p_doodad->getRigidBodyOptionalReference()->getLinearVelocity_mps();
 
     // Compute the current speed from the current velocity
     const double currentSpeed_mps = m_currentVelocity_mps.magnitude();
@@ -96,6 +96,8 @@ PlayerDriver::actuationFixedUpdate(
         // Brake +
         return this->reverseBrake(p_doodad, tickTimeDelta, actuationAmount, currentSpeed_mps);
     }
+
+    /** @todo 2025/03/02 Slow down gradually (air brake) */
 }
 
 void
@@ -142,12 +144,12 @@ PlayerDriver::forwardAcceleration(
 
     const math::Vec3 velocityDelta_mpt_1sFromNow = velocityDelta_mps_1sFromNow / tps;
 
-    const math::Vec3 currentLinearVelocity_mps = rigidBody.getLinearVelocity();
+    const math::Vec3 currentLinearVelocity_mps = rigidBody.getLinearVelocity_mps();
     const math::Vec3 currentLinearVelocity_mpt = currentLinearVelocity_mps / tps;
     const math::Vec3 desiredLinearVelocity_mpt_1sFromNow = currentLinearVelocity_mpt + velocityDelta_mpt_1sFromNow;
     const math::Vec3 desiredLinearVelocity_mps_1sFromNow = desiredLinearVelocity_mpt_1sFromNow * tps;
 
-    rigidBody.setLinearVelocity(desiredLinearVelocity_mps_1sFromNow);
+    rigidBody.setLinearVelocity_mps(desiredLinearVelocity_mps_1sFromNow);
 }
 
 void
