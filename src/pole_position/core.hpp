@@ -11,9 +11,7 @@
  * @brief This is so we don't get linting warnings showing that the version macros
  * are undefined. By doing this the macros will always be defined
  */
-#ifdef APPLICATION_VERSION
-
-#else
+#ifndef APPLICATION_VERSION
 #define APPLICATION_MAJOR_VERSION -1
 #define APPLICATION_MINOR_VERSION -1
 #define APPLICATION_PATCH_VERSION -1

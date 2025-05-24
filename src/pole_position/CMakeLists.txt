@@ -13,6 +13,8 @@ add_executable(
     player_driver/PlayerDriver.cpp
     scene/SceneParameters.hpp
     scene/SceneParameters.cpp
+    third_person_controller/ThirdPersonController.hpp
+    third_person_controller/ThirdPersonController.cpp
 )
 
 target_include_directories(

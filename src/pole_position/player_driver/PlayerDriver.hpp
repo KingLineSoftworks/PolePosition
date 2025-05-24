@@ -28,30 +28,30 @@ private: // member functions
     void actuationFixedUpdate(
         const quartz::managers::InputManager& inputManager,
         quartz::scene::Doodad* const p_doodad,
-        const double tickTimeDelta,
+        const double ticksPerSecond,
         const double currentSpeed_mps
     );
     void forwardAcceleration(
         quartz::scene::Doodad* const p_doodad,
-        const double tickTimeDelta,
+        const double ticksPerSecond,
         const double actuationAmount,
         const double currentSpeed_mps
     );
     void forwardBrake(
         quartz::scene::Doodad* const p_doodad,
-        const double tickTimeDelta,
+        const double ticksPerSecond,
         const double actuationAmount,
         const double currentSpeed_mps
     );
     void reverseAcceleration(
         quartz::scene::Doodad* const p_doodad,
-        const double tickTimeDelta,
+        const double ticksPerSecond,
         const double actuationAmount,
         const double currentSpeed_mps
     );
     void reverseBrake(
         quartz::scene::Doodad* const p_doodad,
-        const double tickTimeDelta,
+        const double ticksPerSecond,
         const double actuationAmount,
         const double currentSpeed_mps
     );

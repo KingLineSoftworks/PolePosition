@@ -6,12 +6,12 @@
 #include "quartz/scene/doodad/Doodad.hpp"
 #include "quartz/scene/scene/Scene.hpp"
 
-#include "pole_position/player_driver/PlayerDriver.hpp"
 #include "pole_position/scene/SceneParameters.hpp"
+#include "pole_position/third_person_controller/ThirdPersonController.hpp"
 
 quartz::scene::Scene::Parameters
 createDemoLevelSceneParameters(
-    PlayerDriver& playerDriver
+    ThirdPersonController& playerController
 ) {
     std::vector<quartz::scene::Doodad::Parameters> doodadParameters = {
         {
@@ -28,9 +28,9 @@ createDemoLevelSceneParameters(
                 math::Vec3(0.0, 1.0, 0.0),
                 quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
             }},
-            [&playerDriver] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerDriver.awakenCallback(parameters); },
-            [&playerDriver] (quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { playerDriver.fixedUpdateCallback(parameters); },
-            [&playerDriver] (quartz::scene::Doodad::UpdateCallbackParameters parameters) { playerDriver.updateCallback(parameters); }
+            [&playerController] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerController.awakenCallback(parameters); },
+            [&playerController] (quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { playerController.fixedUpdateCallback(parameters); },
+            [&playerController] (quartz::scene::Doodad::UpdateCallbackParameters parameters) { playerController.updateCallback(parameters); }
         },
         {
             util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
@@ -38,13 +38,13 @@ createDemoLevelSceneParameters(
                 {0.0f, -0.5f, 0.0f},
                 0.0f,
                 {0.0f, 1.0f, 0.0f},
-                {2000.0f, 1.0f, 2000.0f}
+                {200.0f, 1.0f, 200.0f}
             },
             {{
                 reactphysics3d::BodyType::STATIC,
                 false,
                 math::Vec3(1.0, 1.0, 1.0),
-                quartz::physics::BoxShape::Parameters({2000.0f, 1.0f, 2000.0f})
+                quartz::physics::BoxShape::Parameters({200.0f, 1.0f, 200.0f})
             }},
             {},
             {},

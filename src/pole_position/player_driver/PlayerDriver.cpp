@@ -9,7 +9,7 @@
 #include "pole_position/player_driver/PlayerDriver.hpp"
 
 PlayerDriver::PlayerDriver() :
-    m_gearInformations({{0.7, 10}, {0.4, 25}, {0.2, 35}}),
+    m_gearInformations({{10, 15}, {1.75, 27.5}, {1.25, 35}}),
     m_currentGear(0),
     m_currentDesiredDirection(),
     m_currentVelocity_mps(),
@@ -41,13 +41,13 @@ PlayerDriver::fixedUpdateCallback(
     // Compute the current speed from the current velocity
     const double currentSpeed_mps = m_currentVelocity_mps.magnitude();
 
-    // Turn the car
+    // Steer the car
     
-    // Determine the desired direction of travel
+    // Determine the desired direction of travel accounting for how the car has steered this frame
     m_currentDesiredDirection = math::Vec3::Forward;
     
     // Accelerate / brake
-    this->actuationFixedUpdate(parameters.inputManager, parameters.p_doodad, parameters.tickTimeDelta, currentSpeed_mps);
+    this->actuationFixedUpdate(parameters.inputManager, parameters.p_doodad, parameters.ticksPerSecond, currentSpeed_mps);
 }
 
 void
@@ -65,7 +65,7 @@ void
 PlayerDriver::actuationFixedUpdate(
     const quartz::managers::InputManager& inputManager,
     quartz::scene::Doodad* const p_doodad,
-    const double tickTimeDelta,
+    const double ticksPerSecond,
     const double currentSpeed_mps
 ) {
     // get input (-1 to 1) from S and W
@@ -80,21 +80,21 @@ PlayerDriver::actuationFixedUpdate(
     // We are prepared to go forwards
     if (currentSpeed_mps >= 0.0 && actuationAmount > 0.0) {
         // Accelerate +
-        return this->forwardAcceleration(p_doodad, tickTimeDelta, actuationAmount, currentSpeed_mps);
+        return this->forwardAcceleration(p_doodad, ticksPerSecond, actuationAmount, currentSpeed_mps);
     }
     if (currentSpeed_mps > 0.0 && actuationAmount < 0.0) {
         // Brake -
-        return this->forwardBrake(p_doodad, tickTimeDelta, actuationAmount, currentSpeed_mps);
+        return this->forwardBrake(p_doodad, ticksPerSecond, actuationAmount, currentSpeed_mps);
     }
 
     // We are prepared to go in reverse
     if (currentSpeed_mps <= 0.0 && actuationAmount < 0.0) {
         // Accelerate +
-        return this->reverseAcceleration(p_doodad, tickTimeDelta, actuationAmount, currentSpeed_mps);
+        return this->reverseAcceleration(p_doodad, ticksPerSecond, actuationAmount, currentSpeed_mps);
     }
     if (currentSpeed_mps < 0.0 && actuationAmount > 0.0) {
         // Brake +
-        return this->reverseBrake(p_doodad, tickTimeDelta, actuationAmount, currentSpeed_mps);
+        return this->reverseBrake(p_doodad, ticksPerSecond, actuationAmount, currentSpeed_mps);
     }
 
     /** @todo 2025/03/02 Slow down gradually (air brake) */
@@ -103,59 +103,81 @@ PlayerDriver::actuationFixedUpdate(
 void
 PlayerDriver::forwardAcceleration(
     quartz::scene::Doodad* const p_doodad,
-    const double tickTimeDelta,
-    UNUSED const double actuationAmount,
-    UNUSED const double currentSpeed_mps
+    const double ticksPerSecond,
+    const double actuationAmount,
+    const double currentSpeed_mps
 ) {
+    LOG_FUNCTION_SCOPE_TRACEthis("");
+
     const GearInformation& gearInformation = m_gearInformations[m_currentGear];
     const double accelerationRate_mps2 = gearInformation.accelerationRate_mps2;
     const double maxSpeed_kph = gearInformation.maxSpeed_kph;
 
-    // Determine the amount of ticks in a second
-    const double tps = 1.0 / tickTimeDelta;
-
-    // meters per second^2 -> meters per tick^2
-    /** @todo 2025/02/03 Is this the correct unit to use? */
-    // UNUSED const double accelerationRate_mpt2 = accelerationRate_mps2 * (tps * tps);
+    LOG_TRACEthis("Acceleration rate (mps2): {}", accelerationRate_mps2);
+    LOG_TRACEthis("Max speed         (kph) : {}", maxSpeed_kph);
 
     // kilometers per hour -> meters per hour -> meters per second
-    const double maxSpeed_mps = (maxSpeed_kph * 1000.0) / 60.0;
-    
-    // kilometers per hour -> kilometers per second -> kilometers per tick
-    // UNUSED const double maxSpeed_kpt = (maxSpeed_kph / 60.0) / tps;
+    const double maxSpeed_mps = (maxSpeed_kph * 1000.0) / (60.0 * 60.0);
+    LOG_TRACEthis("Max speed         (mps) : {}", maxSpeed_mps);
 
-    quartz::physics::RigidBody& rigidBody = p_doodad->getRigidBodyOptionalReference().value();
-    
+    LOG_TRACEthis("Current speed     (mps) : {}", currentSpeed_mps);
     if (currentSpeed_mps >= maxSpeed_mps) {
+        LOG_TRACEthis("Current speed exceeds max speed, not accelerating further");
         return;
     }
 
-    // - we have the current velocity in meters per second
-    // - we can calculate what we want the velocity to be in 1 second from now based on our acceleration rate in mps2
-    // - we know how many ticks there are from now until 1 second elapses
-    // - so we can calculate what we want our velocity to be in 1 tick from now
-    // - so we can set the velocity to that value
+    // - based on the acceleration rate in mps2, we can determine the delta in velocity in mps at 1 second from now
+    // - we can convert the velocity delta in mps at 1 second from now to velocity delta in mps at 1 tick from now
+    // - we can convert the velocity delta in mps to mpt
+    // 
+    // - we can convert the current velocity in mps to mpt
+    // - from the current velocity in mpt and the velocity delta in mpt, we can determine the velocity in mpt at 1 tick from now
+    // - we can convert the velocity in mpt at 1 tick from now to velocity in mps at 1 tick from now
+    // - we can set the rigidbody's velocity to be the velocity in mps at 1 tick from now
 
-    // to calculate the velocity delta we should realize in 1 second from now:
-    //   - consider the direction we are heading
-    //   - multiply the direction's unit vector by (accelerationRate_mps2 * actuationAmount)
-    //   - add this resulting vector to our current velocity
+    // -----
+
+    // const math::Vec3 velocityDelta_mps_1sFromNow = m_currentDesiredDirection.normalize() * (accelerationRate_mps2 * actuationAmount);
+    // const math::Vec3 velocityDelta_mpt_1sFromNow = velocityDelta_mps_1sFromNow / ticksPerSecond;
+
+    // const math::Vec3 currentLinearVelocity_mps = rigidBody.getLinearVelocity_mps();
+    // const math::Vec3 currentLinearVelocity_mpt = currentLinearVelocity_mps / ticksPerSecond;
+    // const math::Vec3 desiredLinearVelocity_mpt_1sFromNow = currentLinearVelocity_mpt + velocityDelta_mpt_1sFromNow;
+    // const math::Vec3 desiredLinearVelocity_mps_1sFromNow = desiredLinearVelocity_mpt_1sFromNow * ticksPerSecond;
+    
+    // rigidBody.setLinearVelocity_mps(desiredLinearVelocity_mps_1sFromNow);
+
+    // -----
+
+    // - based on the acceleration rate in mps2, we can determine the delta in velocity in mps at 1 second from now
+    // - we can convert the velocity delta in mps at 1 second from now to velocity delta in mps at 1 tick from now
+    //
+    // - we can calculate the velocity in mps at 1 tick from now from current velocity in mps and velocity delta in mps at 1 tick from now
+    // - we can update the rigidbody's velocity in mps with the newly calculated velocity in mps
+
+    LOG_TRACEthis("");
+    LOG_TRACEthis("Direction: {}", m_currentDesiredDirection.toString());
+    LOG_TRACEthis("Actuated acceleration (mps2): {}", (accelerationRate_mps2 * actuationAmount));
+
     const math::Vec3 velocityDelta_mps_1sFromNow = m_currentDesiredDirection.normalize() * (accelerationRate_mps2 * actuationAmount);
+    const math::Vec3 velocityDelta_mps_1tFromNow = velocityDelta_mps_1sFromNow / ticksPerSecond;
 
-    const math::Vec3 velocityDelta_mpt_1sFromNow = velocityDelta_mps_1sFromNow / tps;
+    LOG_TRACEthis("Velocity delta in 1 second from now (mps): {}", velocityDelta_mps_1sFromNow.toString());
+    LOG_TRACEthis("Velocity delta in 1 tick   from now (mps): {}", velocityDelta_mps_1tFromNow.toString());
 
-    const math::Vec3 currentLinearVelocity_mps = rigidBody.getLinearVelocity_mps();
-    const math::Vec3 currentLinearVelocity_mpt = currentLinearVelocity_mps / tps;
-    const math::Vec3 desiredLinearVelocity_mpt_1sFromNow = currentLinearVelocity_mpt + velocityDelta_mpt_1sFromNow;
-    const math::Vec3 desiredLinearVelocity_mps_1sFromNow = desiredLinearVelocity_mpt_1sFromNow * tps;
+    const math::Vec3 velocity_mps_1tFromNow = m_currentVelocity_mps + velocityDelta_mps_1tFromNow;
 
-    rigidBody.setLinearVelocity_mps(desiredLinearVelocity_mps_1sFromNow);
+    LOG_TRACEthis("Current velocity            (mps): {}", m_currentVelocity_mps.toString());
+    LOG_TRACEthis("Velocity in 1 tick from now (mps): {}", velocityDelta_mps_1sFromNow.toString());
+
+    quartz::physics::RigidBody& rigidBody = p_doodad->getRigidBodyOptionalReference().value();
+    rigidBody.setLinearVelocity_mps(velocity_mps_1tFromNow);
 }
 
 void
 PlayerDriver::forwardBrake(
     UNUSED quartz::scene::Doodad* const p_doodad,
-    UNUSED const double tickTimeDelta,
+    UNUSED const double ticksPerSecond,
     UNUSED const double actuationAmount,
     UNUSED const double currentSpeed_mps
 ) {
@@ -165,7 +187,7 @@ PlayerDriver::forwardBrake(
 void
 PlayerDriver::reverseAcceleration(
     UNUSED quartz::scene::Doodad* const p_doodad,
-    UNUSED const double tickTimeDelta,
+    UNUSED const double ticksPerSecond,
     UNUSED const double actuationAmount,
     UNUSED const double currentSpeed_mps
 ) {
@@ -175,7 +197,7 @@ PlayerDriver::reverseAcceleration(
 void
 PlayerDriver::reverseBrake(
     UNUSED quartz::scene::Doodad* const p_doodad,
-    UNUSED const double tickTimeDelta,
+    UNUSED const double ticksPerSecond,
     UNUSED const double actuationAmount,
     UNUSED const double currentSpeed_mps
 ) {
