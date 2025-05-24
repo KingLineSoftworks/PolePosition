@@ -9,8 +9,6 @@ add_executable(
     main.cpp
     Boilerplate.hpp
     Boilerplate.cpp
-    player_driver/PlayerDriver.hpp
-    player_driver/PlayerDriver.cpp
     scene/SceneParameters.hpp
     scene/SceneParameters.cpp
     third_person_controller/ThirdPersonController.hpp
