@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "math/transform/Vec3.hpp"
 
 #include "util/logger/Logger.hpp"
@@ -13,8 +15,8 @@ ThirdPersonController::ThirdPersonController() :
         { 1.25f, 3.0f, 10.0f },
         math::Vec3::Backward
     ),
-    m_cameraHorizontalOffset(5.0),
-    m_cameraVerticalOffset(3.0),
+    m_cameraSensitivity(1.0),
+    m_cameraOffset(5.0),
     m_maxHorizontalMovementSpeed(7.0),
     m_currentHorizontalMovementSpeed(0.0)
 {}
@@ -47,10 +49,11 @@ ThirdPersonController::movementFixedUpdate(
     quartz::scene::Doodad* const p_doodad,
     UNUSED const double ticksPerSecond
 ) {
-    // Get the direction we are facing
-    // @todo Get this from the camera dotted with the horizon, normalized
-    const math::Vec3 forwardDirection(1, 0, 0); 
-    const math::Vec3 rightDirection(0, 0, 1);
+    const math::Vec3 forwardDirection = m_camera.getLookDirection().getProjectionOntoPlane(math::Vec3::Up).normalize();
+
+    // @todo 2025/05/28 Make the doodad face in forwardDirection
+
+    const math::Vec3 rightDirection = forwardDirection.cross(math::Vec3::Up).normalize();
 
     math::Vec3 horizontalMovementDirection(0, 0, 0);
 
@@ -83,23 +86,20 @@ ThirdPersonController::movementFixedUpdate(
 void
 ThirdPersonController::cameraUpdate(
     UNUSED const quartz::managers::InputManager& inputManager,
-    quartz::scene::Doodad* const p_doodad
+    UNUSED quartz::scene::Doodad* const p_doodad
 ) {
-    // Get doodad information
-    const math::Vec3 doodadPosition = p_doodad->getTransform().position;
-    const math::Vec3 doodadForwardDirection(1, 0, 0);
-    const math::Vec3 doodadUpDirection(0, 1, 0);
+    // Rotate camera according to mouse input
+    const quartz::scene::Camera::EulerAngles previousEulerAngles = m_camera.getEulerAngles();
+    const double calibratedMousePositionOffset_x = inputManager.getMousePositionOffset_x() * m_cameraSensitivity;
+    const double calibratedMousePositionOffset_y = inputManager.getMousePositionOffset_y() * m_cameraSensitivity;
+    const double updatedPitch = std::clamp(previousEulerAngles.pitchDegrees + calibratedMousePositionOffset_y, -89.5, 89.5);
+    const double updatedYaw = glm::mod(previousEulerAngles.yawDegrees - calibratedMousePositionOffset_x, 360.0);
 
-    // Rotate camera around player according to mouse input
-    
-    // Determine position of camera
-    const math::Vec3 cameraPosition =
-        doodadPosition -
-        (doodadForwardDirection * m_cameraHorizontalOffset) +
-        (doodadUpDirection * m_cameraVerticalOffset);
+    m_camera.setEulerAngles({updatedYaw, updatedPitch, previousEulerAngles.rollDegrees});
+
+    // Move camera based on doodad's position and camera's direction
+    // @todo 2025/05/24 Offset by focal point amount
+    const math::Vec3 cameraPosition = p_doodad->getTransform().position - m_camera.getLookDirection() * m_cameraOffset;
     m_camera.setPosition(cameraPosition);
-    
-    // Point the camera at the doodad
-    m_camera.lookAtPosition(doodadPosition);
 }
 

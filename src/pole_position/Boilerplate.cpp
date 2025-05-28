@@ -50,7 +50,7 @@ DoBoilerplateStuff(
         {"APPLICATION", util::Logger::Level::info},
 
         // managers
-        {"INPUTMAN", util::Logger::Level::info},
+        {"INPUTMAN", util::Logger::Level::debug},
         {"PHYSICSMAN", util::Logger::Level::info},
 
         // physics

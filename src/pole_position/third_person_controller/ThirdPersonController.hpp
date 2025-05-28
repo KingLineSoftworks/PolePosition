@@ -34,8 +34,8 @@ private: // member functions
 
 private: // member variables
     quartz::scene::Camera m_camera;
-    double m_cameraHorizontalOffset;
-    double m_cameraVerticalOffset;
+    UNUSED double m_cameraSensitivity;
+    UNUSED double m_cameraOffset;
 
     double m_maxHorizontalMovementSpeed;
     double m_currentHorizontalMovementSpeed;
