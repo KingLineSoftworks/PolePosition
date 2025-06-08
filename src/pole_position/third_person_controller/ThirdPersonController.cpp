@@ -38,10 +38,13 @@ ThirdPersonController::ThirdPersonController() :
         { 1.25f, 3.0f, 10.0f },
         math::Vec3::Backward
     ),
-    m_cameraSensitivity(10.0),
-    m_cameraFocalPointHorizontalOffset(5.0),
-    m_cameraFocalPointVerticalOffset(5.0),
-    m_cameraDistance(10.0),
+    m_cameraSensitivity(4.0),
+    m_cameraDistanceSensitivity(0.25),
+    m_cameraFocalPointHorizontalOffset(2.0),
+    m_cameraFocalPointVerticalOffset(2.0),
+    m_cameraDistanceMin(1.0),
+    m_cameraDistanceMax(30.0),
+    m_cameraDistanceCurrent(10.0),
     m_maxHorizontalMovementSpeed(7.0),
     m_currentHorizontalMovementSpeed(0.0)
 {}
@@ -122,8 +125,13 @@ ThirdPersonController::cameraUpdate(
     const double updatedYaw = glm::mod(previousEulerAngles.yawDegrees - calibratedMousePositionOffset_x, 360.0);
     m_camera.setEulerAngles({updatedYaw, updatedPitch, previousEulerAngles.rollDegrees});
 
+    // Update the camera distance according to mouse input
+    const double calibratedMouseDistanceOffset = inputManager.getScrollOffset_y() * m_cameraDistanceSensitivity * -1.0;
+    m_cameraDistanceCurrent += calibratedMouseDistanceOffset;
+    m_cameraDistanceCurrent = std::clamp(m_cameraDistanceCurrent, m_cameraDistanceMin, m_cameraDistanceMax);
+
     // Move camera based on doodad's position and camera's direction
-    const math::Vec3 cameraInitialPosition = p_doodad->getTransform().position - m_camera.getLookDirection() * m_cameraDistance;
+    const math::Vec3 cameraInitialPosition = p_doodad->getTransform().position - m_camera.getLookDirection() * m_cameraDistanceCurrent;
     const math::Vec3 cameraPositionOffset = ThirdPersonController::calculateCameraOffset(
         m_camera.getLookDirection(),
         m_cameraFocalPointHorizontalOffset,
