@@ -1,7 +1,9 @@
 #include <algorithm>
 
+#include "math/transform/Mat3.hpp"
 #include "math/transform/Vec3.hpp"
 
+#include "quartz/scene/camera/Camera.hpp"
 #include "util/logger/Logger.hpp"
 
 #include "quartz/scene/doodad/Doodad.hpp"
@@ -16,7 +18,7 @@ ThirdPersonController::ThirdPersonController() :
         math::Vec3::Backward
     ),
     m_cameraSensitivity(1.0),
-    m_cameraOffset(5.0),
+    m_cameraOffset(10.0),
     m_maxHorizontalMovementSpeed(7.0),
     m_currentHorizontalMovementSpeed(0.0)
 {}
@@ -51,7 +53,8 @@ ThirdPersonController::movementFixedUpdate(
 ) {
     const math::Vec3 forwardDirection = m_camera.getLookDirection().getProjectionOntoPlane(math::Vec3::Up).normalize();
 
-    // @todo 2025/05/28 Make the doodad face in forwardDirection
+    const math::Quaternion doodadRotation = math::Quaternion::fromEulerAngles(-1 * m_camera.getEulerAngles().yawDegrees, 0, 0);
+    p_doodad->setRotation(doodadRotation);
 
     const math::Vec3 rightDirection = forwardDirection.cross(math::Vec3::Up).normalize();
 
