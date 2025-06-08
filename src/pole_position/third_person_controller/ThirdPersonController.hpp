@@ -20,6 +20,13 @@ public: // member functions
 
     USE_LOGGER(PLAYER);
 
+private: // helpers
+    static math::Vec3 calculateCameraOffset(
+        const math::Vec3& cameraLookDirection,
+        const double horizontalOffset,
+        const double verticalOffset
+    );
+
 private: // member functions
     void movementFixedUpdate(
         const quartz::managers::InputManager& inputManager,
@@ -34,8 +41,10 @@ private: // member functions
 
 private: // member variables
     quartz::scene::Camera m_camera;
-    UNUSED double m_cameraSensitivity;
-    UNUSED double m_cameraOffset;
+    double m_cameraSensitivity;
+    double m_cameraFocalPointHorizontalOffset;
+    double m_cameraFocalPointVerticalOffset;
+    double m_cameraDistance;
 
     double m_maxHorizontalMovementSpeed;
     double m_currentHorizontalMovementSpeed;

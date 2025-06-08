@@ -1,15 +1,36 @@
 #include <algorithm>
 
-#include "math/transform/Mat3.hpp"
+#include "util/logger/Logger.hpp"
+
 #include "math/transform/Vec3.hpp"
 
 #include "quartz/scene/camera/Camera.hpp"
-#include "util/logger/Logger.hpp"
 
 #include "quartz/scene/doodad/Doodad.hpp"
 #include "quartz/scene/scene/Scene.hpp"
+#include "util/macros.hpp"
 
 #include "pole_position/third_person_controller/ThirdPersonController.hpp"
+
+math::Vec3
+ThirdPersonController::calculateCameraOffset(
+    const math::Vec3& cameraLookDirection,
+    const double horizontalOffset,
+    const double verticalOffset
+) {
+    QUARTZ_ASSERT(cameraLookDirection.isNormalized(), "Camera look direction must be normalized");
+
+    const math::Vec3 cameraRightDirection = cameraLookDirection.cross(math::Vec3::Up).normalize();
+    QUARTZ_ASSERT(cameraRightDirection.isNormalized(), "Camera right direction must be normalized");
+
+    const math::Vec3 cameraUpDirection = cameraRightDirection.cross(cameraLookDirection).normalize();
+    QUARTZ_ASSERT(cameraUpDirection.isNormalized(), "Camera up direction must be normalized");
+
+    const math::Vec3 cameraHorizontalOffset = horizontalOffset * cameraRightDirection;
+    const math::Vec3 cameraVerticalOffset = verticalOffset * cameraUpDirection;
+
+    return cameraHorizontalOffset + cameraVerticalOffset;
+}
 
 ThirdPersonController::ThirdPersonController() :
     m_camera(
@@ -17,8 +38,10 @@ ThirdPersonController::ThirdPersonController() :
         { 1.25f, 3.0f, 10.0f },
         math::Vec3::Backward
     ),
-    m_cameraSensitivity(1.0),
-    m_cameraOffset(10.0),
+    m_cameraSensitivity(10.0),
+    m_cameraFocalPointHorizontalOffset(5.0),
+    m_cameraFocalPointVerticalOffset(5.0),
+    m_cameraDistance(10.0),
     m_maxHorizontalMovementSpeed(7.0),
     m_currentHorizontalMovementSpeed(0.0)
 {}
@@ -88,8 +111,8 @@ ThirdPersonController::movementFixedUpdate(
  
 void
 ThirdPersonController::cameraUpdate(
-    UNUSED const quartz::managers::InputManager& inputManager,
-    UNUSED quartz::scene::Doodad* const p_doodad
+    const quartz::managers::InputManager& inputManager,
+    quartz::scene::Doodad* const p_doodad
 ) {
     // Rotate camera according to mouse input
     const quartz::scene::Camera::EulerAngles previousEulerAngles = m_camera.getEulerAngles();
@@ -97,12 +120,16 @@ ThirdPersonController::cameraUpdate(
     const double calibratedMousePositionOffset_y = inputManager.getMousePositionOffset_y() * m_cameraSensitivity;
     const double updatedPitch = std::clamp(previousEulerAngles.pitchDegrees + calibratedMousePositionOffset_y, -89.5, 89.5);
     const double updatedYaw = glm::mod(previousEulerAngles.yawDegrees - calibratedMousePositionOffset_x, 360.0);
-
     m_camera.setEulerAngles({updatedYaw, updatedPitch, previousEulerAngles.rollDegrees});
 
     // Move camera based on doodad's position and camera's direction
-    // @todo 2025/05/24 Offset by focal point amount
-    const math::Vec3 cameraPosition = p_doodad->getTransform().position - m_camera.getLookDirection() * m_cameraOffset;
+    const math::Vec3 cameraInitialPosition = p_doodad->getTransform().position - m_camera.getLookDirection() * m_cameraDistance;
+    const math::Vec3 cameraPositionOffset = ThirdPersonController::calculateCameraOffset(
+        m_camera.getLookDirection(),
+        m_cameraFocalPointHorizontalOffset,
+        m_cameraFocalPointVerticalOffset
+    );
+    const math::Vec3 cameraPosition = cameraInitialPosition + cameraPositionOffset;
     m_camera.setPosition(cameraPosition);
 }
 
