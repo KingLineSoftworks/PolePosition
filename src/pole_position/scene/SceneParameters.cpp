@@ -9,29 +9,97 @@
 #include "pole_position/scene/SceneParameters.hpp"
 #include "pole_position/third_person_controller/ThirdPersonController.hpp"
 
-quartz::scene::Scene::Parameters
-createDemoLevelSceneParameters(
+quartz::scene::Doodad::Parameters
+createPlayerDoodadParameters(
     ThirdPersonController& playerController
 ) {
-    std::vector<quartz::scene::Doodad::Parameters> doodadParameters = {
+    return {
+        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/unit_models/unit_cube/glb/unit_cube.glb"),
         {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/unit_models/unit_cube/glb/unit_cube.glb"),
+            { 5.0f, 0.5f, 5.0f },
+            0.0f,
+            { 0.0f, 0.0f, 1.0f },
+            { 1.0f, 1.0f, 1.0f }
+        },
+        {{
+            reactphysics3d::BodyType::DYNAMIC,
+            true,
+            math::Vec3(0.0, 1.0, 0.0),
             {
-                { 5.0f, 0.5f, 5.0f },
+                {
+                    static_cast<uint16_t>(PhysicsLayer::Player),
+                    0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Player)
+                },
+                quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
+            }
+        }},
+        [&playerController] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerController.awakenCallback(parameters); },
+        [&playerController] (quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { playerController.fixedUpdateCallback(parameters); },
+        [&playerController] (quartz::scene::Doodad::UpdateCallbackParameters parameters) { playerController.updateCallback(parameters); }
+    };
+}
+
+std::vector<quartz::scene::Doodad::Parameters>
+createObjectsDoodadParameter() {
+    return {
+        // The water bottle 
+        {
+            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"),
+            {
+                { 10.0f, 3.0f, 10.0f },
                 0.0f,
                 { 0.0f, 0.0f, 1.0f },
-                { 1.0f, 1.0f, 1.0f }
+                { 10.0f, 10.0f, 10.0f }
             },
             {{
-                reactphysics3d::BodyType::DYNAMIC,
+                reactphysics3d::BodyType::STATIC,
                 true,
                 math::Vec3(0.0, 1.0, 0.0),
-                quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
+                {
+                    {
+                        static_cast<uint16_t>(PhysicsLayer::Interactable),
+                        0xFFFF
+                    },
+                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
+                }
             }},
-            [&playerController] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerController.awakenCallback(parameters); },
-            [&playerController] (quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { playerController.fixedUpdateCallback(parameters); },
-            [&playerController] (quartz::scene::Doodad::UpdateCallbackParameters parameters) { playerController.updateCallback(parameters); }
+            [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
         },
+
+        // The boombox
+        {
+            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/BoomBox/glTF-Binary/BoomBox.glb"),
+            {
+                { 20.0f, 3.0f, 20.0f },
+                0.0f,
+                { 0.0f, 0.0f, 1.0f },
+                { 200.0f, 200.0f, 200.0f }
+            },
+            {{
+                reactphysics3d::BodyType::STATIC,
+                true,
+                math::Vec3(0.0, 1.0, 0.0),
+                {
+                    {
+                        static_cast<uint16_t>(PhysicsLayer::Interactable),
+                        0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Player)
+                    },
+                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
+                }
+            }},
+            [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
+        },
+    };
+}
+
+std::vector<quartz::scene::Doodad::Parameters>
+createTerrainDoodadParameter() {
+    return {
+        // The ground bro
         {
             util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
             {
@@ -44,13 +112,31 @@ createDemoLevelSceneParameters(
                 reactphysics3d::BodyType::STATIC,
                 false,
                 math::Vec3(1.0, 1.0, 1.0),
-                quartz::physics::BoxShape::Parameters({200.0f, 1.0f, 200.0f})
+                {
+                    {
+                        static_cast<uint16_t>(PhysicsLayer::Terrain),
+                        0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Terrain)
+                    },
+                    quartz::physics::BoxShape::Parameters({200.0f, 1.0f, 200.0f})
+                }
             }},
             {},
             {},
             {}
-        },
+        }
     };
+}
+
+quartz::scene::Scene::Parameters
+createDemoLevelSceneParameters(
+    ThirdPersonController& playerController
+) {
+    std::vector<quartz::scene::Doodad::Parameters> objectsDoodadParameters = createObjectsDoodadParameter();
+    std::vector<quartz::scene::Doodad::Parameters> terrainDoodadParameters = createTerrainDoodadParameter();
+    std::vector<quartz::scene::Doodad::Parameters> doodadParameters = { createPlayerDoodadParameters(playerController) };
+    doodadParameters.reserve(doodadParameters.size() + objectsDoodadParameters.size() + terrainDoodadParameters.size());
+    doodadParameters.insert(doodadParameters.end(), objectsDoodadParameters.begin(), objectsDoodadParameters.end());
+    doodadParameters.insert(doodadParameters.end(), terrainDoodadParameters.begin(), terrainDoodadParameters.end());
 
     quartz::scene::AmbientLight ambientLight({ 0.1f, 0.1f, 0.1f });
 

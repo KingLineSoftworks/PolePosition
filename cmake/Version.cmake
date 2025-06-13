@@ -9,4 +9,4 @@ include(ApplicationVersion)
 # -----=====***** the versions *****=====----- #
 
 #set_application_major_minor_patch_versions(0 0 1) # initial setup and test scene working
-set_application_major_minor_patch_versions(0 1 0) # prototype driving mechanics by directly setting linear velocity
+set_application_major_minor_patch_versions(0 1 0) # prototype 3d person character controller with a couple of scene objects

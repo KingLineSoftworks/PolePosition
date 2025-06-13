@@ -38,14 +38,14 @@ ThirdPersonController::ThirdPersonController() :
         { 1.25f, 3.0f, 10.0f },
         math::Vec3::Backward
     ),
-    m_cameraSensitivity(4.0),
+    m_cameraSensitivity(2.0),
     m_cameraDistanceSensitivity(0.25),
     m_cameraFocalPointHorizontalOffset(2.0),
     m_cameraFocalPointVerticalOffset(2.0),
     m_cameraDistanceMin(1.0),
-    m_cameraDistanceMax(30.0),
+    m_cameraDistanceMax(200.0),
     m_cameraDistanceCurrent(10.0),
-    m_maxHorizontalMovementSpeed(7.0),
+    m_maxHorizontalMovementSpeed(15.0),
     m_currentHorizontalMovementSpeed(0.0)
 {}
 
