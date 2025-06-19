@@ -6,7 +6,7 @@
 
 #include "pole_position/third_person_controller/ThirdPersonController.hpp"
 
-enum class PhysicsLayer : uint16_t {
+enum class CollisionCategories : uint16_t {
     Default         = 0b0000000000000000,
     Player          = 0b0000000000000001,
     Terrain         = 0b0000000000000010,

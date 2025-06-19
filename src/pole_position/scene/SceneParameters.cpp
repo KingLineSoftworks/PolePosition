@@ -28,8 +28,8 @@ createPlayerDoodadParameters(
             {
                 false,
                 {
-                    static_cast<uint16_t>(PhysicsLayer::Player),
-                    0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Player)
+                    static_cast<uint16_t>(CollisionCategories::Player),
+                    0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Player)
                 },
                 quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
             }
@@ -59,7 +59,7 @@ createObjectsDoodadParameter() {
                 {
                     false,
                     {
-                        static_cast<uint16_t>(PhysicsLayer::Interactable),
+                        static_cast<uint16_t>(CollisionCategories::Interactable),
                         0xFFFF
                     },
                     quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
@@ -86,8 +86,8 @@ createObjectsDoodadParameter() {
                 {
                     false,
                     {
-                        static_cast<uint16_t>(PhysicsLayer::Interactable),
-                        0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Player)
+                        static_cast<uint16_t>(CollisionCategories::Interactable),
+                        0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Player)
                     },
                     quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
                 }
@@ -118,8 +118,8 @@ createTerrainDoodadParameter() {
                 {
                     false,
                     {
-                        static_cast<uint16_t>(PhysicsLayer::Terrain),
-                        0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Terrain)
+                        static_cast<uint16_t>(CollisionCategories::Terrain),
+                        0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Terrain)
                     },
                     quartz::physics::BoxShape::Parameters({200.0f, 1.0f, 200.0f})
                 }
