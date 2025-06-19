@@ -26,6 +26,7 @@ createPlayerDoodadParameters(
             true,
             math::Vec3(0.0, 1.0, 0.0),
             {
+                false,
                 {
                     static_cast<uint16_t>(PhysicsLayer::Player),
                     0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Player)
@@ -56,6 +57,7 @@ createObjectsDoodadParameter() {
                 true,
                 math::Vec3(0.0, 1.0, 0.0),
                 {
+                    false,
                     {
                         static_cast<uint16_t>(PhysicsLayer::Interactable),
                         0xFFFF
@@ -82,6 +84,7 @@ createObjectsDoodadParameter() {
                 true,
                 math::Vec3(0.0, 1.0, 0.0),
                 {
+                    false,
                     {
                         static_cast<uint16_t>(PhysicsLayer::Interactable),
                         0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Player)
@@ -113,6 +116,7 @@ createTerrainDoodadParameter() {
                 false,
                 math::Vec3(1.0, 1.0, 1.0),
                 {
+                    false,
                     {
                         static_cast<uint16_t>(PhysicsLayer::Terrain),
                         0xFFFF ^ static_cast<uint16_t>(PhysicsLayer::Terrain)
