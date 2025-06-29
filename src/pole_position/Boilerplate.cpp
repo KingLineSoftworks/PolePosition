@@ -38,7 +38,7 @@ DoBoilerplateStuff(
     util::Logger::setLevels({
         // demo app
         {"GENERAL", util::Logger::Level::info},
-        {"PLAYER", util::Logger::Level::trace},
+        {"PLAYER", util::Logger::Level::info},
 
         // math
         {"TRANSFORM", util::Logger::Level::info},
@@ -50,8 +50,9 @@ DoBoilerplateStuff(
         {"APPLICATION", util::Logger::Level::info},
 
         // managers
-        {"INPUTMAN", util::Logger::Level::debug},
+        {"INPUTMAN", util::Logger::Level::info},
         {"PHYSICSMAN", util::Logger::Level::info},
+        {"SCENEMAN", util::Logger::Level::info},
 
         // physics
         {"COLLIDER", util::Logger::Level::info},
@@ -59,11 +60,6 @@ DoBoilerplateStuff(
         {"SHAPE_SPHERE", util::Logger::Level::info},
         {"FIELD", util::Logger::Level::info},
         {"RIGIDBODY", util::Logger::Level::info},
-
-        // rendering
-        {"INPUTMAN", util::Logger::Level::info},
-        {"PHYSICSMAN", util::Logger::Level::info},
-        {"SCENEMAN", util::Logger::Level::info},
 
         // rendering
         {"BUFFER", util::Logger::Level::info},
