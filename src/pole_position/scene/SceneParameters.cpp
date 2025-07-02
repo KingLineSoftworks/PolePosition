@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "math/transform/Vec3.hpp"
+#include "quartz/physics/collider/Collider.hpp"
 #include "util/file_system/FileSystem.hpp"
 
 #include "quartz/scene/doodad/Doodad.hpp"
@@ -32,7 +33,7 @@ createPlayerDoodadParameters(
                     0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Player)
                 },
                 quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
-                {}
+                [&playerController] (quartz::physics::Collider::CollisionCallbackParameters parameters) { playerController.collisionCallback(parameters); },
             }
         }},
         [&playerController] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerController.awakenCallback(parameters); },

@@ -18,6 +18,8 @@ public: // member functions
     void fixedUpdateCallback(quartz::scene::Doodad::FixedUpdateCallbackParameters parameters);
     void updateCallback(quartz::scene::Doodad::UpdateCallbackParameters parameters);
 
+    void collisionCallback(quartz::physics::Collider::CollisionCallbackParameters parameters);
+
     USE_LOGGER(PLAYER);
 
 private: // helpers

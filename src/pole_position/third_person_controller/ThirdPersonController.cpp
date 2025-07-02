@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include "quartz/physics/collider/Collider.hpp"
 #include "util/logger/Logger.hpp"
 
 #include "math/transform/Vec3.hpp"
@@ -139,5 +140,12 @@ ThirdPersonController::cameraUpdate(
     );
     const math::Vec3 cameraPosition = cameraInitialPosition + cameraPositionOffset;
     m_camera.setPosition(cameraPosition);
+}
+
+void
+ThirdPersonController::collisionCallback(
+    UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters
+) {
+    
 }
 
