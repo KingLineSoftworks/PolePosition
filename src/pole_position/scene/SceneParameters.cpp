@@ -31,7 +31,8 @@ createPlayerDoodadParameters(
                     static_cast<uint16_t>(CollisionCategories::Player),
                     0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Player)
                 },
-                quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
+                quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                {}
             }
         }},
         [&playerController] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerController.awakenCallback(parameters); },
@@ -62,7 +63,8 @@ createObjectsDoodadParameter() {
                         static_cast<uint16_t>(CollisionCategories::Interactable),
                         0xFFFF
                     },
-                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
+                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                    {}
                 }
             }},
             [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
@@ -89,7 +91,8 @@ createObjectsDoodadParameter() {
                         static_cast<uint16_t>(CollisionCategories::Interactable),
                         0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Player)
                     },
-                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f})
+                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                    {}
                 }
             }},
             [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
@@ -121,7 +124,8 @@ createTerrainDoodadParameter() {
                         static_cast<uint16_t>(CollisionCategories::Terrain),
                         0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Terrain)
                     },
-                    quartz::physics::BoxShape::Parameters({200.0f, 1.0f, 200.0f})
+                    quartz::physics::BoxShape::Parameters({200.0f, 1.0f, 200.0f}),
+                    {}
                 }
             }},
             {},
