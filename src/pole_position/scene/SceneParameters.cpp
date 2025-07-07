@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "math/transform/Vec3.hpp"
+#include "pole_position/Loggers.hpp"
 #include "quartz/physics/collider/Collider.hpp"
 #include "util/file_system/FileSystem.hpp"
 
@@ -9,6 +10,7 @@
 
 #include "pole_position/scene/SceneParameters.hpp"
 #include "pole_position/third_person_controller/ThirdPersonController.hpp"
+#include "util/logger/Logger.hpp"
 
 quartz::scene::Doodad::Parameters
 createPlayerDoodadParameters(
@@ -65,7 +67,7 @@ createObjectsDoodadParameter() {
                         0xFFFF
                     },
                     quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
-                    {}
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
                 }
             }},
             [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
@@ -87,13 +89,13 @@ createObjectsDoodadParameter() {
                 true,
                 math::Vec3(0.0, 1.0, 0.0),
                 {
-                    false,
+                    true,
                     {
                         static_cast<uint16_t>(CollisionCategories::Interactable),
-                        0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Player)
+                        0xFFFF
                     },
                     quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
-                    {}
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
                 }
             }},
             [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
