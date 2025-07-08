@@ -1,15 +1,14 @@
 #include <algorithm>
 
-#include "quartz/physics/collider/Collider.hpp"
-#include "util/logger/Logger.hpp"
-
 #include "math/transform/Vec3.hpp"
 
-#include "quartz/scene/camera/Camera.hpp"
+#include "util/macros.hpp"
+#include "util/logger/Logger.hpp"
 
+#include "quartz/physics/collider/Collider.hpp"
+#include "quartz/scene/camera/Camera.hpp"
 #include "quartz/scene/doodad/Doodad.hpp"
 #include "quartz/scene/scene/Scene.hpp"
-#include "util/macros.hpp"
 
 #include "pole_position/third_person_controller/ThirdPersonController.hpp"
 
