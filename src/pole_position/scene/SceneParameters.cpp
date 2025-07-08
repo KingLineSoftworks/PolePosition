@@ -25,7 +25,7 @@ createPlayerDoodadParameters(
             { 1.0f, 1.0f, 1.0f }
         },
         {{
-            reactphysics3d::BodyType::DYNAMIC,
+            quartz::physics::RigidBody::BodyType::Dynamic,
             true,
             math::Vec3(0.0, 1.0, 0.0),
             {
@@ -59,7 +59,7 @@ createObjectsDoodadParameter() {
                 { 10.0f, 10.0f, 10.0f }
             },
             {{
-                reactphysics3d::BodyType::STATIC,
+                quartz::physics::RigidBody::BodyType::Static,
                 true,
                 math::Vec3(0.0, 1.0, 0.0),
                 {
@@ -89,7 +89,7 @@ createObjectsDoodadParameter() {
                 { 200.0f, 200.0f, 200.0f }
             },
             {{
-                reactphysics3d::BodyType::STATIC,
+                quartz::physics::RigidBody::BodyType::Static,
                 true,
                 math::Vec3(0.0, 1.0, 0.0),
                 {
@@ -124,7 +124,7 @@ createTerrainDoodadParameter() {
                 {200.0f, 1.0f, 200.0f}
             },
             {{
-                reactphysics3d::BodyType::STATIC,
+                quartz::physics::RigidBody::BodyType::Static,
                 false,
                 math::Vec3(1.0, 1.0, 1.0),
                 {
