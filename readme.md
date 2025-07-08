@@ -1,7 +1,6 @@
 # Pole Position
-Pole Position is a project that aims to simulate the mechanics of automobiles.
-The goal is to accurately simulate the workings of all parts, from IC engines to suspension.
-Pole Position hopes to be used for engineering purposes, to virtually test and iterate, and for training purposes, in a virtual racing environment.
+Pole Position is a project that originally aimed to simulate the mechanics of automobiles.
+Now it is used as a general sandbox project to develop features for the Quartz engine.
 
 This project utilizes the [Quartz Engine](https://github.com/KingLineSoftworks/Quartz.git) and acts as a demonstration for how to use the Quartz Engine for your application.
 

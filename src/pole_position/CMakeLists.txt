@@ -9,10 +9,10 @@ add_executable(
     main.cpp
     Boilerplate.hpp
     Boilerplate.cpp
-    SceneParameters.hpp
-    SceneParameters.cpp
-    player/Player.hpp
-    player/Player.cpp
+    scene/SceneParameters.hpp
+    scene/SceneParameters.cpp
+    third_person_controller/ThirdPersonController.hpp
+    third_person_controller/ThirdPersonController.cpp
 )
 
 target_include_directories(

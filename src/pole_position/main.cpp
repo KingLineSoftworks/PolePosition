@@ -8,8 +8,8 @@
 
 #include "pole_position/Loggers.hpp"
 #include "pole_position/Boilerplate.hpp"
-#include "pole_position/SceneParameters.hpp"
-#include "pole_position/player/Player.hpp"
+#include "pole_position/scene/SceneParameters.hpp"
+#include "pole_position/third_person_controller/ThirdPersonController.hpp"
 
 int main() {
     DO_BOILERPLATE(false);
@@ -20,10 +20,10 @@ int main() {
     const bool validationLayersEnabled = true;
 #endif
 
-    Player player;
+    ThirdPersonController playerController;
 
     std::vector<quartz::scene::Scene::Parameters> quartzSceneParameters {
-        createDemoLevelSceneParameters(player)
+        createDemoLevelSceneParameters(playerController)
     };
 
     quartz::Application application(
