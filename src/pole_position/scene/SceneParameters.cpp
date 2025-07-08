@@ -35,7 +35,9 @@ createPlayerDoodadParameters(
                     0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Player)
                 },
                 quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
-                [&playerController] (quartz::physics::Collider::CollisionCallbackParameters parameters) { playerController.collisionCallback(parameters); },
+                [&playerController] (quartz::physics::Collider::CollisionCallbackParameters parameters) { playerController.collisionStartCallback(parameters); },
+                [&playerController] (quartz::physics::Collider::CollisionCallbackParameters parameters) { playerController.collisionStayCallback(parameters); },
+                [&playerController] (quartz::physics::Collider::CollisionCallbackParameters parameters) { playerController.collisionEndCallback(parameters); },
             }
         }},
         [&playerController] (quartz::scene::Doodad::AwakenCallbackParameters parameters) { playerController.awakenCallback(parameters); },
@@ -67,6 +69,8 @@ createObjectsDoodadParameter() {
                         0xFFFF
                     },
                     quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
                 }
             }},
@@ -95,6 +99,8 @@ createObjectsDoodadParameter() {
                         0xFFFF
                     },
                     quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
                 }
             }},
@@ -128,6 +134,8 @@ createTerrainDoodadParameter() {
                         0xFFFF ^ static_cast<uint16_t>(CollisionCategories::Terrain)
                     },
                     quartz::physics::BoxShape::Parameters({200.0f, 1.0f, 200.0f}),
+                    {},
+                    {},
                     {}
                 }
             }},

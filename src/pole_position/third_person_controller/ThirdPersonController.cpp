@@ -143,9 +143,17 @@ ThirdPersonController::cameraUpdate(
 }
 
 void
-ThirdPersonController::collisionCallback(
+ThirdPersonController::collisionStartCallback(
     UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters
-) {
-    
-}
+) {}
+
+void
+ThirdPersonController::collisionStayCallback(
+    UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters
+) {}
+
+void
+ThirdPersonController::collisionEndCallback(
+    UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters
+) {}
 
