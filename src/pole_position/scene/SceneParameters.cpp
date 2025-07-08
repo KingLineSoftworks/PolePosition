@@ -1,16 +1,17 @@
 #include <vector>
 
 #include "math/transform/Vec3.hpp"
-#include "pole_position/Loggers.hpp"
-#include "quartz/physics/collider/Collider.hpp"
+
+#include "util/logger/Logger.hpp"
 #include "util/file_system/FileSystem.hpp"
 
+#include "quartz/physics/collider/Collider.hpp"
 #include "quartz/scene/doodad/Doodad.hpp"
 #include "quartz/scene/scene/Scene.hpp"
 
+#include "pole_position/Loggers.hpp"
 #include "pole_position/scene/SceneParameters.hpp"
 #include "pole_position/third_person_controller/ThirdPersonController.hpp"
-#include "util/logger/Logger.hpp"
 
 quartz::scene::Doodad::Parameters
 createPlayerDoodadParameters(
