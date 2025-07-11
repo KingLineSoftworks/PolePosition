@@ -35,8 +35,12 @@ endif ()
 
 # Quartz
 set(QUARTZ_COMPILE_DEMO_APPLICATION OFF CACHE BOOL "" FORCE)
+set(QUARTZ_COMPILE_UNIT_TESTS ON CACHE BOOL "" FORCE)
 add_subdirectory("${PROJECT_SOURCE_DIR}/Quartz")
 
 # Pole Position
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/pole_position")
+
+# Tests
+enable_testing()
 
