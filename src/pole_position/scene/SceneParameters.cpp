@@ -18,7 +18,7 @@ createPlayerDoodadParameters(
     ThirdPersonController& playerController
 ) {
     return {
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/unit_models/unit_cube/glb/unit_cube.glb"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/unit_models/unit_cube/glb/unit_cube.glb"),
         {
             { 5.0f, 0.5f, 5.0f },
             0.0f,
@@ -52,7 +52,7 @@ createObjectsDoodadParameter() {
     return {
         // The water bottle 
         {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"),
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"),
             {
                 { 10.0f, 3.0f, 10.0f },
                 0.0f,
@@ -82,7 +82,7 @@ createObjectsDoodadParameter() {
 
         // The boombox
         {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/BoomBox/glTF-Binary/BoomBox.glb"),
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/BoomBox/glTF-Binary/BoomBox.glb"),
             {
                 { 20.0f, 3.0f, 20.0f },
                 0.0f,
@@ -117,7 +117,7 @@ createTerrainDoodadParameter() {
     return {
         // The ground bro
         {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
             {
                 {0.0f, -0.5f, 0.0f},
                 0.0f,
@@ -169,12 +169,12 @@ createDemoLevelSceneParameters(
     math::Vec3 screenClearColor = { 0.25f, 0.4f, 0.6f };
     
     std::array<std::string, 6> skyBoxInformation = {
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/posx.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/negx.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/posy.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/negy.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/posz.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/negz.jpg")
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/posx.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/negx.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/posy.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/negy.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/posz.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/negz.jpg")
     };
 
     std::optional<quartz::physics::Field::Parameters> o_fieldParameters({{0.0, -1.0, 0.0}});

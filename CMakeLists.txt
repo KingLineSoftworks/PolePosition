@@ -1,7 +1,6 @@
 # ====================================================================
 # Pole Position project and version
 # ====================================================================
-
 set(PROJECT_NAME "Pole Position")
 
 cmake_minimum_required(VERSION 3.20)
@@ -34,8 +33,8 @@ endif ()
 # ====================================================================
 
 # Quartz
-set(QUARTZ_COMPILE_DEMO_APPLICATION OFF CACHE BOOL "" FORCE)
 set(QUARTZ_COMPILE_UNIT_TESTS ON CACHE BOOL "" FORCE)
+set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 add_subdirectory("${PROJECT_SOURCE_DIR}/Quartz")
 
 # Pole Position
