@@ -69,7 +69,7 @@ createObjectsDoodadParameter() {
                         static_cast<uint16_t>(CollisionCategories::Interactable),
                         0xFFFF
                     },
-                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                    quartz::physics::BoxShape::Parameters({0.1f, 0.1f, 0.1f}),
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
@@ -99,7 +99,7 @@ createObjectsDoodadParameter() {
                         static_cast<uint16_t>(CollisionCategories::Interactable),
                         0xFFFF
                     },
-                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                    quartz::physics::BoxShape::Parameters({1.0f / 200, 1.0f / 200, 1.0f / 200}),
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
                     [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
