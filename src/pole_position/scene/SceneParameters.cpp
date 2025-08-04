@@ -51,7 +51,7 @@ std::vector<quartz::scene::Doodad::Parameters>
 createObjectsDoodadParameter() {
     return {
         // The water bottle 
-        {
+        quartz::scene::Doodad::Parameters {
             util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"),
             {
                 { 10.0f, 3.0f, 10.0f },
@@ -81,7 +81,7 @@ createObjectsDoodadParameter() {
         },
 
         // The boombox
-        {
+        quartz::scene::Doodad::Parameters {
             util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/BoomBox/glTF-Binary/BoomBox.glb"),
             {
                 { 20.0f, 3.0f, 20.0f },
@@ -116,7 +116,7 @@ std::vector<quartz::scene::Doodad::Parameters>
 createTerrainDoodadParameter() {
     return {
         // The ground bro
-        {
+        quartz::scene::Doodad::Parameters {
             util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
             {
                 {0.0f, -0.5f, 0.0f},
