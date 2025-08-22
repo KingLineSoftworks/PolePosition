@@ -109,6 +109,36 @@ createObjectsDoodadParameter() {
             [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
             [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
         },
+
+        // The antique camera 
+        quartz::scene::Doodad::Parameters {
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/AntiqueCamera/glTF/AntiqueCamera.gltf"),
+            {
+                { -10.0f, 0.0f, 20.0f },
+                0.0f,
+                { 0.0f, 0.0f, 1.0f },
+                { 0.75f, 0.75f, 0.75f }
+            },
+            {{
+                quartz::physics::RigidBody::BodyType::Static,
+                true,
+                math::Vec3(0.0, 1.0, 0.0),
+                {
+                    false,
+                    {
+                        static_cast<uint16_t>(CollisionCategories::Interactable),
+                        0xFFFF
+                    },
+                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
+                }
+            }},
+            [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
+        },
     };
 }
 

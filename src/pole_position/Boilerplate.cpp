@@ -37,7 +37,7 @@ DoBoilerplateStuff(
 
     util::Logger::setLevels({
         // demo app
-        {"GENERAL", util::Logger::Level::trace},
+        {"GENERAL", util::Logger::Level::info},
         {"PLAYER", util::Logger::Level::info},
 
         // math
@@ -131,11 +131,6 @@ DoBoilerplateStuff(
 #endif
     }
 
-    if (!glfwInit()) {
-        LOG_CRITICAL(GENERAL, "Failed to initialize GLFW");
-        return EXIT_FAILURE;
-    }
-    LOG_INFO(GENERAL, "GLFW initialized");
-
     return 0;
 }
+
