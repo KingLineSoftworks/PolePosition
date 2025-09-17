@@ -131,11 +131,6 @@ DoBoilerplateStuff(
 #endif
     }
 
-    if (!glfwInit()) {
-        LOG_CRITICAL(GENERAL, "Failed to initialize GLFW");
-        return EXIT_FAILURE;
-    }
-    LOG_INFO(GENERAL, "GLFW initialized");
-
     return 0;
 }
+

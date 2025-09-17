@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include "math/transform/Quaternion.hpp"
 #include "math/transform/Vec3.hpp"
 
 #include "util/macros.hpp"
@@ -36,7 +37,7 @@ ThirdPersonController::ThirdPersonController() :
     m_camera(
         75.0f,
         { 1.25f, 3.0f, 10.0f },
-        math::Vec3::Backward
+        math::Quaternion::fromDirectionVector(math::Vec3::Forward)
     ),
     m_cameraSensitivity(2.0),
     m_cameraDistanceSensitivity(0.25),
@@ -79,7 +80,7 @@ ThirdPersonController::movementFixedUpdate(
 ) {
     const math::Vec3 forwardDirection = m_camera.getLookDirection().getProjectionOntoPlane(math::Vec3::Up).normalize();
 
-    const math::Quaternion doodadRotation = math::Quaternion::fromEulerAngles(-1 * m_camera.getEulerAngles().yawDegrees, 0, 0);
+    const math::Quaternion doodadRotation = math::Quaternion::fromEulerAngles(m_camera.getHorizontalRotationDegrees(), 0, 0);
     p_doodad->setRotation(doodadRotation);
 
     const math::Vec3 rightDirection = forwardDirection.cross(math::Vec3::Up).normalize();
@@ -118,16 +119,13 @@ ThirdPersonController::cameraUpdate(
     quartz::scene::Doodad* const p_doodad
 ) {
     // Rotate camera according to mouse input
-    const quartz::scene::Camera::EulerAngles previousEulerAngles = m_camera.getEulerAngles();
     const double calibratedMousePositionOffset_x = inputManager.getMousePositionOffset_x() * m_cameraSensitivity;
-    const double calibratedMousePositionOffset_y = inputManager.getMousePositionOffset_y() * m_cameraSensitivity;
-    const double updatedPitch = std::clamp(previousEulerAngles.pitchDegrees + calibratedMousePositionOffset_y, -89.5, 89.5);
-    const double updatedYaw = glm::mod(previousEulerAngles.yawDegrees - calibratedMousePositionOffset_x, 360.0);
-    m_camera.setEulerAngles({updatedYaw, updatedPitch, previousEulerAngles.rollDegrees});
+    const double calibratedMousePositionOffset_y = inputManager.getMousePositionOffset_y() * m_cameraSensitivity * -1;
+    m_camera.rotateDegrees(calibratedMousePositionOffset_x, calibratedMousePositionOffset_y, 0);
 
     // Update the camera distance according to mouse input
     const double calibratedMouseDistanceOffset = inputManager.getScrollOffset_y() * m_cameraDistanceSensitivity * -1.0;
-    m_cameraDistanceCurrent += calibratedMouseDistanceOffset;
+    m_cameraDistanceCurrent -= calibratedMouseDistanceOffset;
     m_cameraDistanceCurrent = std::clamp(m_cameraDistanceCurrent, m_cameraDistanceMin, m_cameraDistanceMax);
 
     // Move camera based on doodad's position and camera's direction

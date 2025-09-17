@@ -18,7 +18,7 @@ createPlayerDoodadParameters(
     ThirdPersonController& playerController
 ) {
     return {
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/unit_models/unit_cube/glb/unit_cube.glb"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/unit_models/unit_cube/glb/unit_cube.glb"),
         {
             { 5.0f, 0.5f, 5.0f },
             0.0f,
@@ -51,13 +51,73 @@ std::vector<quartz::scene::Doodad::Parameters>
 createObjectsDoodadParameter() {
     return {
         // The water bottle 
-        {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"),
+        quartz::scene::Doodad::Parameters {
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/WaterBottle/glTF-Binary/WaterBottle.glb"),
             {
                 { 10.0f, 3.0f, 10.0f },
                 0.0f,
                 { 0.0f, 0.0f, 1.0f },
                 { 10.0f, 10.0f, 10.0f }
+            },
+            {{
+                quartz::physics::RigidBody::BodyType::Static,
+                true,
+                math::Vec3(0.0, 1.0, 0.0),
+                {
+                    false,
+                    {
+                        static_cast<uint16_t>(CollisionCategories::Interactable),
+                        0xFFFF
+                    },
+                    quartz::physics::BoxShape::Parameters({0.1f, 0.1f, 0.1f}),
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
+                }
+            }},
+            [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
+        },
+
+        // The boombox
+        quartz::scene::Doodad::Parameters {
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/BoomBox/glTF-Binary/BoomBox.glb"),
+            {
+                { 20.0f, 3.0f, 20.0f },
+                0.0f,
+                { 0.0f, 0.0f, 1.0f },
+                { 200.0f, 200.0f, 200.0f }
+            },
+            {{
+                quartz::physics::RigidBody::BodyType::Static,
+                true,
+                math::Vec3(0.0, 1.0, 0.0),
+                {
+                    true,
+                    {
+                        static_cast<uint16_t>(CollisionCategories::Interactable),
+                        0xFFFF
+                    },
+                    quartz::physics::BoxShape::Parameters({1.0f / 200, 1.0f / 200, 1.0f / 200}),
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
+                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
+                }
+            }},
+            [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
+            [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
+        },
+
+        // The antique camera 
+        quartz::scene::Doodad::Parameters {
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/AntiqueCamera/glTF/AntiqueCamera.gltf"),
+            {
+                { -10.0f, 0.0f, 20.0f },
+                0.0f,
+                { 0.0f, 0.0f, 1.0f },
+                { 0.75f, 0.75f, 0.75f }
             },
             {{
                 quartz::physics::RigidBody::BodyType::Static,
@@ -79,36 +139,6 @@ createObjectsDoodadParameter() {
             [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
             [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
         },
-
-        // The boombox
-        {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/BoomBox/glTF-Binary/BoomBox.glb"),
-            {
-                { 20.0f, 3.0f, 20.0f },
-                0.0f,
-                { 0.0f, 0.0f, 1.0f },
-                { 200.0f, 200.0f, 200.0f }
-            },
-            {{
-                quartz::physics::RigidBody::BodyType::Static,
-                true,
-                math::Vec3(0.0, 1.0, 0.0),
-                {
-                    true,
-                    {
-                        static_cast<uint16_t>(CollisionCategories::Interactable),
-                        0xFFFF
-                    },
-                    quartz::physics::BoxShape::Parameters({1.0f, 1.0f, 1.0f}),
-                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
-                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { },
-                    [&] (UNUSED quartz::physics::Collider::CollisionCallbackParameters parameters) { }
-                }
-            }},
-            [&] (UNUSED quartz::scene::Doodad::AwakenCallbackParameters parameters) { },
-            [&] (UNUSED quartz::scene::Doodad::FixedUpdateCallbackParameters parameters) { },
-            [&] (UNUSED quartz::scene::Doodad::UpdateCallbackParameters parameters) { }
-        },
     };
 }
 
@@ -116,8 +146,8 @@ std::vector<quartz::scene::Doodad::Parameters>
 createTerrainDoodadParameter() {
     return {
         // The ground bro
-        {
-            util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
+        quartz::scene::Doodad::Parameters {
+            util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/models/glTF-Sample-Models/2.0/Cube/glTF/Cube.gltf"),
             {
                 {0.0f, -0.5f, 0.0f},
                 0.0f,
@@ -169,12 +199,12 @@ createDemoLevelSceneParameters(
     math::Vec3 screenClearColor = { 0.25f, 0.4f, 0.6f };
     
     std::array<std::string, 6> skyBoxInformation = {
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/posx.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/negx.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/posy.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/negy.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/posz.jpg"),
-        util::FileSystem::getAbsoluteFilepathInProjectDirectory("assets/sky_boxes/parliament/negz.jpg")
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/posx.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/negx.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/posy.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/negy.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/posz.jpg"),
+        util::FileSystem::getAbsoluteFilepathInQuartzDirectory("assets/sky_boxes/parliament/negz.jpg")
     };
 
     std::optional<quartz::physics::Field::Parameters> o_fieldParameters({{0.0, -1.0, 0.0}});
