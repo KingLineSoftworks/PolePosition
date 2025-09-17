@@ -8,5 +8,7 @@ include(ApplicationVersion)
 
 # -----=====***** the versions *****=====----- #
 
-#set_application_major_minor_patch_versions(0 0 1) # initial setup and test scene working
-set_application_major_minor_patch_versions(0 1 0) # prototype 3d person character controller with a couple of scene objects
+# set_application_major_minor_patch_versions(0 0 1) # initial setup and test scene working
+# set_application_major_minor_patch_versions(0 1 0) # prototype 3d person character controller with a couple of scene objects
+set_application_major_minor_patch_versions(0 1 1) # upgrade Quartz to allow for rich exceptions, unit tests, bug fixes, etc
+
