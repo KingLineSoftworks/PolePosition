@@ -88,18 +88,18 @@ ThirdPersonController::movementFixedUpdate(
     math::Vec3 horizontalMovementDirection(0, 0, 0);
 
     // Front and back
-    if (inputManager.getKeyDown_w()) {
+    if (inputManager.getKeyInfo_w().down) {
         horizontalMovementDirection += forwardDirection;
     }
-    if (inputManager.getKeyDown_s()) {
+    if (inputManager.getKeyInfo_s().down) {
         horizontalMovementDirection -= forwardDirection;
     }
 
     // Left and right
-    if (inputManager.getKeyDown_a()) {
+    if (inputManager.getKeyInfo_a().down) {
         horizontalMovementDirection -= rightDirection;
     }
-    if (inputManager.getKeyDown_d()) {
+    if (inputManager.getKeyInfo_d().down) {
         horizontalMovementDirection += rightDirection;
     }
 
